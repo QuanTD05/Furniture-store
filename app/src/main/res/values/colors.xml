@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red_primary">#EB5757</color>
+    <color name="teal_700">#00C853</color> <!-- hoặc dùng bất kỳ màu xanh bạn muốn -->
+
 </resources>

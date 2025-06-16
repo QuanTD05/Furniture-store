@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/logo"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Phần giữa căn giữa và đẩy xuống dưới -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="bottom|center_horizontal"
+        android:paddingBottom="32dp">
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chào mừng đến với FMCarer"
+            android:textColor="#F44336"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvSubText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hãy thỏa mãn sự lựa chọn của mình"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+    <!-- Phần cuối: button + text + checkbox -->
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bắt đầu"
+        android:backgroundTint="#00C853"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvTermsOfService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Điều khoản dịch vụ"
+        android:textColor="@color/black"
+        android:paddingTop="8dp"
+        android:textSize="14sp" />
+
+    <CheckBox
+        android:id="@+id/checkboxAgreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tôi đồng ý các điều khoản sử dụng và chính sách quyền riêng tư khi sử dụng ứng dụng"
+        android:textColor="#0F0000"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>
