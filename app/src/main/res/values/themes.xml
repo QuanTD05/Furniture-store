@@ -1,9 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.DATN" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+    <!-- Base application theme -->
+    <style name="Theme.DATN" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Màu chính của ứng dụng -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/white</item>
 
-    <style name="Theme.DATN" parent="Base.Theme.DATN" />
+        <!-- Màu phụ -->
+        <item name="colorSecondary">@color/secondary_color</item>
+
+        <!-- Màu nền chung -->
+        <item name="android:colorBackground">@color/background_light</item>
+
+        <!-- Màu chữ chính -->
+        <item name="android:textColorPrimary">@color/black</item>
+
+        <!-- Tắt ActionBar nếu không dùng -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
