@@ -44,5 +44,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-database'
     apply plugin: 'com.android.application'
     apply plugin: 'com.google.gms.google-services'
+    implementation 'androidx.fragment:fragment:1.6.1'
 
 }
