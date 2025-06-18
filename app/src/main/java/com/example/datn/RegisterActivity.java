@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         RadioButton selectedRoleButton = findViewById(selectedId);
-        String role = selectedRoleButton.getText().toString().trim().toLowerCase(); // CHỈNH CHỖ NÀY
+        String role = selectedRoleButton.getText().toString().trim().toLowerCase();
 
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
@@ -93,7 +93,10 @@ public class RegisterActivity extends AppCompatActivity {
                             usersRef.child(user.getUid()).setValue(userData)
                                     .addOnSuccessListener(unused -> {
                                         Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                                        redirectToRoleScreen(role);
+                                        // Chuyển đến màn hình đăng nhập
+                                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     })
                                     .addOnFailureListener(e -> {
                                         Toast.makeText(this, "Lỗi lưu dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -103,65 +106,5 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(this, "Lỗi đăng ký: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-    }
-
-    // Tạm thời bỏ qua phân quyền
-
-//    private void registerUser() {
-//        String email = emailEditText.getText().toString().trim();
-//        String password = passwordEditText.getText().toString().trim();
-//        String confirmPassword = confirmPasswordEditText.getText().toString().trim();
-//
-//        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-//            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        if (!password.equals(confirmPassword)) {
-//            Toast.makeText(this, "Mật khẩu nhập lại không khớp", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        if (password.length() < 6) {
-//            Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        mAuth.createUserWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-//                        // Chuyển về màn hình login hoặc main
-//                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-//                        finish();
-//                    } else {
-//                        Toast.makeText(this, "Lỗi đăng ký: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//    }
-
-    private void redirectToRoleScreen(String role) {
-        if (role == null) {
-            Toast.makeText(this, "Không xác định được quyền", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent;
-        switch (role) {
-            case "admin":
-                intent = new Intent(this, AdminActivity.class);
-                break;
-            case "staff":
-                intent = new Intent(this, StaffActivity.class);
-                break;
-            case "user":
-                intent = new Intent(this, UserActivity.class);
-                break;
-            default:
-                Toast.makeText(this, "Quyền không hợp lệ", Toast.LENGTH_SHORT).show();
-                return;
-        }
-        startActivity(intent);
-        finish();
     }
 }
