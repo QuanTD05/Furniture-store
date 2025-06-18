@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.example.datn"
         minSdk 31
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -46,6 +46,8 @@ dependencies {
     apply plugin: 'com.google.gms.google-services'
     implementation 'androidx.fragment:fragment:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 
 }
