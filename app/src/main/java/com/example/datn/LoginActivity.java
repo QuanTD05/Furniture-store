@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login);
         txtSignup = findViewById(R.id.txt_signup);
         txtForgot = findViewById(R.id.txtForgot);
-        roleGroup = findViewById(R.id.roleGroup); // 🟢 Bắt buộc người dùng chọn role
+        roleGroup = findViewById(R.id.roleGroup); // Bắt buộc người dùng chọn vai trò
 
         loginButton.setOnClickListener(v -> loginUser());
 
@@ -56,7 +56,11 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        String selectedRole = ((RadioButton) findViewById(selectedRoleId)).getText().toString().toLowerCase();
+        // Lấy role từ tag thay vì text, an toàn hơn
+        RadioButton selectedRoleBtn = findViewById(selectedRoleId);
+        String selectedRole = selectedRoleBtn.getTag() != null
+                ? selectedRoleBtn.getTag().toString().toLowerCase()
+                : selectedRoleBtn.getText().toString().toLowerCase();
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập email và mật khẩu", Toast.LENGTH_SHORT).show();
@@ -118,4 +122,3 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 }
-

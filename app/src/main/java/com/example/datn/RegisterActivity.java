@@ -2,6 +2,7 @@ package com.example.datn;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -64,9 +65,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         RadioButton selectedRoleButton = findViewById(selectedId);
-        String role = selectedRoleButton.getText().toString().trim().toLowerCase();
+        String role = selectedRoleButton.getTag() != null ? selectedRoleButton.getTag().toString() : "";
 
-        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || role.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -93,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                             usersRef.child(user.getUid()).setValue(userData)
                                     .addOnSuccessListener(unused -> {
                                         Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                                        // Chuyển đến màn hình đăng nhập
+                                        Log.d("Register", "Đăng ký thành công với role: " + role);
                                         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                         startActivity(intent);
                                         finish();
@@ -104,6 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast.makeText(this, "Lỗi đăng ký: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("Register", "Đăng ký thất bại", task.getException());
                     }
                 });
     }
