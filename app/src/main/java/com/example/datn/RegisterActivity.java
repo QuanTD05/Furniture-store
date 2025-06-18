@@ -32,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register); // Ensure activity_register.xml is the correct file
+        setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("users");
@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         RadioButton selectedRoleButton = findViewById(selectedId);
-        String role = selectedRoleButton.getText().toString();
+        String role = selectedRoleButton.getText().toString().trim().toLowerCase(); // CHỈNH CHỖ NÀY
 
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
@@ -86,7 +86,6 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            // Lưu email và quyền vào Firebase Database
                             Map<String, Object> userData = new HashMap<>();
                             userData.put("email", email);
                             userData.put("role", role);
@@ -106,6 +105,41 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
+    // Tạm thời bỏ qua phân quyền
+
+//    private void registerUser() {
+//        String email = emailEditText.getText().toString().trim();
+//        String password = passwordEditText.getText().toString().trim();
+//        String confirmPassword = confirmPasswordEditText.getText().toString().trim();
+//
+//        if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+//            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        if (!password.equals(confirmPassword)) {
+//            Toast.makeText(this, "Mật khẩu nhập lại không khớp", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        if (password.length() < 6) {
+//            Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        mAuth.createUserWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+//                        // Chuyển về màn hình login hoặc main
+//                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+//                        finish();
+//                    } else {
+//                        Toast.makeText(this, "Lỗi đăng ký: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//    }
+
     private void redirectToRoleScreen(String role) {
         if (role == null) {
             Toast.makeText(this, "Không xác định được quyền", Toast.LENGTH_SHORT).show();
@@ -113,7 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         Intent intent;
-        switch (role.toLowerCase()) {
+        switch (role) {
             case "admin":
                 intent = new Intent(this, AdminActivity.class);
                 break;

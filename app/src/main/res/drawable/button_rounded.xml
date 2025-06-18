@@ -2,20 +2,13 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <!-- Màu nền của nút -->
-    <solid android:color="#8A0032" /> <!-- Màu xanh lá đậm -->
+    <!-- Màu nền -->
+    <solid android:color="#E91E63" /> <!-- Màu hồng đậm -->
 
     <!-- Bo góc -->
     <corners android:radius="12dp" />
 
-    <!-- Viền ngoài nếu cần -->
-    <!--
-    <stroke
-        android:width="2dp"
-        android:color="#008C3A" />
-    -->
-
-    <!-- Đổ bóng hoặc padding nếu muốn -->
+    <!-- (Tuỳ chọn) padding nội bộ -->
     <padding
         android:left="12dp"
         android:top="8dp"

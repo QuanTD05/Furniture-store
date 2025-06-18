@@ -8,10 +8,17 @@
     android:padding="24dp">
 
     <!-- Phần giữa: lời chào -->
+    <!-- Phần giữa: lời chào -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -19,11 +26,12 @@
             android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chào mừng đến với FMCarer"
+            android:text="Chào mung den voi FM"
             android:textColor="#F44336"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
         <TextView
@@ -35,6 +43,8 @@
             android:textSize="16sp"
             android:gravity="center" />
     </LinearLayout>
+</LinearLayout>
+
 
     <!-- Phần cuối -->
     <Button
@@ -44,7 +54,7 @@
         android:text="Bắt đầu"
         android:textSize="18sp"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#00C853"
+        android:backgroundTint="#E90000"
         android:layout_marginBottom="16dp" />
 
     <TextView
