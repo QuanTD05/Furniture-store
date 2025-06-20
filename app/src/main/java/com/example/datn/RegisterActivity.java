@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DataSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +25,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText fullNameEditText, phoneEditText, emailEditText;
     private TextInputEditText passwordEditText, confirmPasswordEditText;
-    private RadioGroup roleGroup;
     private Button registerButton;
     private TextView txtLogin;
 
@@ -41,17 +39,14 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("users");
 
-        // Ánh xạ View
         fullNameEditText = findViewById(R.id.fullName);
         phoneEditText = findViewById(R.id.phoneNumber);
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
         confirmPasswordEditText = findViewById(R.id.confirmPassword);
-        roleGroup = findViewById(R.id.roleGroup);
         registerButton = findViewById(R.id.btnRegister);
         txtLogin = findViewById(R.id.txt_login);
 
-        // Bắt sự kiện
         registerButton.setOnClickListener(v -> registerUser());
 
         txtLogin.setOnClickListener(v -> {
@@ -67,18 +62,20 @@ public class RegisterActivity extends AppCompatActivity {
         String password = passwordEditText.getText() != null ? passwordEditText.getText().toString().trim() : "";
         String confirmPassword = confirmPasswordEditText.getText() != null ? confirmPasswordEditText.getText().toString().trim() : "";
 
-        int selectedId = roleGroup.getCheckedRadioButtonId();
-        if (selectedId == -1) {
-            Toast.makeText(this, "Vui lòng chọn quyền", Toast.LENGTH_SHORT).show();
+        String role = "user";
+
+        if (fullName.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        RadioButton selectedRole = findViewById(selectedId);
-        String role = selectedRole.getTag().toString();
+        if (!email.endsWith("@gmail.com")) {
+            Toast.makeText(this, "Email phải có đuôi @gmail.com", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Kiểm tra dữ liệu
-        if (fullName.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        if (!phone.matches("^\\d{10}$")) {
+            Toast.makeText(this, "Số điện thoại phải gồm đúng 10 chữ số", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -87,48 +84,69 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        if (password.length() < 6) {
-            Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+        // Kiểm tra độ mạnh của mật khẩu
+        if (password.length() < 6 ||
+                !password.matches(".*[A-Z].*") ||        // ít nhất 1 chữ in hoa
+                !password.matches(".*[0-9].*") ||        // ít nhất 1 chữ số
+                !password.matches(".*[!@#$%^&*+=?.].*")) // ít nhất 1 ký tự đặc biệt
+        {
+            Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự, bao gồm 1 chữ hoa, 1 số và 1 ký tự đặc biệt", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // Kiểm tra trùng số điện thoại
-        usersRef.orderByChild("phone").equalTo(phone)
-                .get()
-                .addOnSuccessListener(snapshot -> {
-                    if (snapshot.exists()) {
-                        Toast.makeText(this, "Số điện thoại đã tồn tại", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Đăng ký Firebase Auth
-                        mAuth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        if (user != null) {
-                                            Map<String, Object> userMap = new HashMap<>();
-                                            userMap.put("fullName", fullName);
-                                            userMap.put("phone", phone);
-                                            userMap.put("email", email);
-                                            userMap.put("role", role);
+        usersRef.get().addOnSuccessListener(snapshot -> {
+            boolean emailExists = false;
+            boolean phoneExists = false;
 
-                                            usersRef.child(user.getUid())
-                                                    .setValue(userMap)
-                                                    .addOnSuccessListener(unused -> {
-                                                        Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                                        finish();
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Toast.makeText(this, "Lỗi khi lưu người dùng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    });
-                                        }
-                                    } else {
-                                        Toast.makeText(this, "Lỗi đăng ký: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                        Log.e("RegisterActivity", "Đăng ký thất bại", task.getException());
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(this, "Lỗi kết nối: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                String existingEmail = userSnapshot.child("email").getValue(String.class);
+                String existingPhone = userSnapshot.child("phone").getValue(String.class);
+
+                if (existingEmail != null && existingEmail.equals(email)) {
+                    emailExists = true;
+                }
+
+                if (existingPhone != null && existingPhone.equals(phone)) {
+                    phoneExists = true;
+                }
+            }
+
+            if (emailExists) {
+                Toast.makeText(this, "Email đã được sử dụng.", Toast.LENGTH_SHORT).show();
+            } else if (phoneExists) {
+                Toast.makeText(this, "Số điện thoại đã được sử dụng.", Toast.LENGTH_SHORT).show();
+            } else {
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user != null) {
+                                    Map<String, Object> userMap = new HashMap<>();
+                                    userMap.put("fullName", fullName);
+                                    userMap.put("phone", phone);
+                                    userMap.put("email", email);
+                                    userMap.put("role", role);
+
+                                    usersRef.child(user.getUid())
+                                            .setValue(userMap)
+                                            .addOnSuccessListener(unused -> {
+                                                Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                                finish();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(this, "Lỗi khi lưu người dùng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            });
+                                }
+                            } else {
+                                Toast.makeText(this, "Lỗi đăng ký: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                Log.e("RegisterActivity", "Đăng ký thất bại", task.getException());
+                            }
+                        });
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Lỗi kết nối: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
     }
+
 }

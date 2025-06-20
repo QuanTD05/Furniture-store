@@ -104,38 +104,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- RadioGroup quyền -->
-        <RadioGroup
-            android:id="@+id/roleGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="12dp">
-
-            <RadioButton
-                android:id="@+id/rb_admin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Admin"
-                android:tag="admin" />
-
-            <RadioButton
-                android:id="@+id/rb_staff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Staff"
-                android:tag="staff"
-                android:layout_marginStart="20dp" />
-
-            <RadioButton
-                android:id="@+id/rb_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="User"
-                android:tag="user"
-                android:layout_marginStart="20dp" />
-        </RadioGroup>
-
         <!-- Nút đăng ký -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnRegister"
