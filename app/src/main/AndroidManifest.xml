@@ -13,8 +13,9 @@
         android:theme="@style/Theme.DATN"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity2"
+            android:name=".StaffListActivity"
             android:exported="false" />
+
         <activity
             android:name=".UserActivity"
             android:exported="false" />

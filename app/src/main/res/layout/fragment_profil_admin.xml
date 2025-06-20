@@ -68,6 +68,7 @@
         <!-- Thêm các mục khác tương tự -->
         <!-- Quản lý người dùng -->
         <LinearLayout
+            android:id="@+id/menuUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -85,6 +86,7 @@
 
         <!-- Quản lý món ăn -->
         <LinearLayout
+            android:id="@+id/menuFood"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -102,6 +104,7 @@
 
         <!-- Quản lý đánh giá -->
         <LinearLayout
+            android:id="@+id/menuReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -119,6 +122,7 @@
 
         <!-- Thống kê doanh thu -->
         <LinearLayout
+            android:id="@+id/menuRevenue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
