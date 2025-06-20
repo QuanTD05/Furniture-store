@@ -1,6 +1,8 @@
 package com.example.datn;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -18,13 +20,15 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);  // Đảm bảo có layout này
+        setContentView(R.layout.activity_user);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Load Fragment mặc định (Home)
+        // Mặc định mở HomeFragment
         loadFragment(new HomeFragment());
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
 
+        // Lắng nghe sự kiện chọn menu bottom nav
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int itemId = item.getItemId();
@@ -43,9 +47,29 @@ public class UserActivity extends AppCompatActivity {
                 loadFragment(selectedFragment);
                 return true;
             }
-
             return false;
         });
+
+        // Kiểm tra xem có yêu cầu mở fragment cụ thể từ intent không
+        handleIntent(getIntent());
+    }
+
+    // Được gọi khi có intent mới (ví dụ quay lại từ OrderHistoryActivity)
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d("UserActivity", "onNewIntent(): target_fragment="
+                + intent.getStringExtra("target_fragment"));
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        String targetFragment = intent.getStringExtra("target_fragment");
+        if ("profile".equals(targetFragment)) {
+            loadFragment(new ProfileFragment());
+            bottomNavigationView.setSelectedItemId(R.id.nav_profile);
+        }
     }
 
     private void loadFragment(Fragment fragment) {
