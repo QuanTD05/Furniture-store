@@ -1,0 +1,46 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Các mục trên -->
+    <item
+        android:id="@+id/nav_orders"
+        android:title="Quản lý đơn hàng"
+        android:icon="@drawable/logo" />
+
+    <item
+        android:id="@+id/nav_users"
+        android:title="Quản lý người dùng"
+        android:icon="@drawable/logo" />
+
+    <item
+        android:id="@+id/nav_furniture"
+        android:title="Quản lý nội thất"
+        android:icon="@drawable/logo" />
+
+    <item
+        android:id="@+id/nav_reviews"
+        android:title="Quản lý đánh giá"
+        android:icon="@drawable/logo" />
+
+    <item
+        android:id="@+id/nav_statistics"
+        android:title="Thống kê doanh thu"
+        android:icon="@drawable/logo" />
+
+    <!-- Divider -->
+    <item
+        android:enabled="false"
+        android:title=""
+        android:orderInCategory="100"
+        android:icon="@null"
+        android:checkable="false"
+        app:actionLayout="@layout/menu_divider"/>
+
+    <!-- Đăng xuất -->
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Đăng xuất"
+        android:icon="@drawable/ic_logout"
+        android:orderInCategory="101" />
+
+</menu>
