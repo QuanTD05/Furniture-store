@@ -5,27 +5,27 @@
     <item
         android:id="@+id/nav_orders"
         android:title="Quản lý đơn hàng"
-        android:icon="@drawable/logo" />
+        android:icon="@drawable/icon_donhang" />
 
     <item
         android:id="@+id/nav_users"
         android:title="Quản lý người dùng"
-        android:icon="@drawable/logo" />
+        android:icon="@drawable/icon_nguoidung" />
 
     <item
         android:id="@+id/nav_furniture"
         android:title="Quản lý nội thất"
-        android:icon="@drawable/logo" />
+        android:icon="@drawable/icon_quanlynt" />
 
     <item
         android:id="@+id/nav_reviews"
         android:title="Quản lý đánh giá"
-        android:icon="@drawable/logo" />
+        android:icon="@drawable/icon_quanlydg" />
 
     <item
         android:id="@+id/nav_statistics"
         android:title="Thống kê doanh thu"
-        android:icon="@drawable/logo" />
+        android:icon="@drawable/icon_thongke" />
 
     <!-- Divider -->
     <item

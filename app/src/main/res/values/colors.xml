@@ -11,4 +11,7 @@
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+
+    <!-- Thêm dòng này để fix lỗi pink -->
+    <color name="pink">#FF4081</color>
 </resources>

@@ -1,25 +1,27 @@
 package com.example.datn.model;
 
+import java.util.List;
+
 public class OrderModel {
     private String id;
     private String customerName;
     private String orderDate;
     private double totalAmount;
     private String status;
+    private List<ProductInOrder> items;
 
+    public OrderModel() {
+    }
 
-    public OrderModel() {}
-
-
-    public OrderModel(String id, String customerName, String orderDate, double totalAmount, String status) {
+    public OrderModel(String id, String customerName, String orderDate, double totalAmount, String status, List<ProductInOrder> items) {
         this.id = id;
         this.customerName = customerName;
         this.orderDate = orderDate;
         this.totalAmount = totalAmount;
         this.status = status;
+        this.items = items;
     }
 
-    // Getter & Setter
     public String getId() {
         return id;
     }
@@ -58,5 +60,13 @@ public class OrderModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<ProductInOrder> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ProductInOrder> items) {
+        this.items = items;
     }
 }
