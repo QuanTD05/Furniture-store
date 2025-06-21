@@ -4,10 +4,13 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,9 +49,11 @@ public class FurnitureFragment extends Fragment {
     private RecyclerView recyclerFurniture;
     private FurnitureAdapter adapter;
     private List<FurnitureModel> furnitureList;
+    private List<FurnitureModel> allFurnitureList = new ArrayList<>();
     private DatabaseReference furnitureRef;
     private EditText editSearch;
     private FloatingActionButton fabAdd;
+    private Spinner spinnerFilter;
     private Uri selectedImageUri = null;
     private final int REQUEST_IMAGE_PICK = 1001;
     private ImageView currentImageView;
@@ -64,6 +69,7 @@ public class FurnitureFragment extends Fragment {
         recyclerFurniture = view.findViewById(R.id.recycler_furniture);
         editSearch = view.findViewById(R.id.edit_search);
         fabAdd = view.findViewById(R.id.fab_add);
+        spinnerFilter = view.findViewById(R.id.spinner_filter);
 
         recyclerFurniture.setLayoutManager(new GridLayoutManager(getContext(), 2));
         furnitureList = new ArrayList<>();
@@ -89,6 +95,34 @@ public class FurnitureFragment extends Fragment {
 
         furnitureRef = FirebaseDatabase.getInstance().getReference("furniture");
 
+        String[] types = {"Tất cả", "Bàn", "Ghế", "Tủ", "Giường"};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, types);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFilter.setAdapter(spinnerAdapter);
+
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filterByType(parent.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterByName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         loadFurnitureData();
 
         fabAdd.setOnClickListener(v -> {
@@ -104,11 +138,13 @@ public class FurnitureFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 furnitureList.clear();
+                allFurnitureList.clear();
                 for (DataSnapshot data : snapshot.getChildren()) {
                     FurnitureModel item = data.getValue(FurnitureModel.class);
                     if (item != null) {
                         item.setId(data.getKey());
                         furnitureList.add(item);
+                        allFurnitureList.add(item);
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -119,6 +155,38 @@ public class FurnitureFragment extends Fragment {
                 Log.e("FurnitureFragment", "Lỗi tải dữ liệu: " + error.getMessage());
             }
         });
+    }
+
+    private void filterByType(String type) {
+        furnitureList.clear();
+        if (type.equals("Tất cả")) {
+            furnitureList.addAll(allFurnitureList);
+        } else {
+            for (FurnitureModel item : allFurnitureList) {
+                if (item.getType().equalsIgnoreCase(type)) {
+                    furnitureList.add(item);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void filterByName(String keyword) {
+        String selectedType = spinnerFilter.getSelectedItem().toString();
+        List<FurnitureModel> filtered = new ArrayList<>();
+
+        for (FurnitureModel item : allFurnitureList) {
+            boolean matchType = selectedType.equals("Tất cả") || item.getType().equalsIgnoreCase(selectedType);
+            boolean matchName = item.getName().toLowerCase().contains(keyword.toLowerCase());
+
+            if (matchType && matchName) {
+                filtered.add(item);
+            }
+        }
+
+        furnitureList.clear();
+        furnitureList.addAll(filtered);
+        adapter.notifyDataSetChanged();
     }
 
     private void deleteFurniture(FurnitureModel furniture) {

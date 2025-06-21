@@ -13,7 +13,6 @@ import com.example.datn.UserFragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-// 🆕 Import các fragment bạn đã tạo
 import com.example.datn.StaffFragment.OrdersFragment;
 import com.example.datn.StaffFragment.UsersFragment;
 import com.example.datn.StaffFragment.FurnitureFragment;
